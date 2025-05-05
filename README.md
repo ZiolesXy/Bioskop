@@ -82,8 +82,8 @@ Database terdiri dari tabel-tabel berikut:
 ## Penggunaan
 
 ### Login Admin
-- Username: admin
-- Password: admin123
+- Username: 1
+- Password: 1
 
 ### Login User
 - Daftar akun baru melalui halaman register

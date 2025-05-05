@@ -2,8 +2,6 @@
 
 Sistem Manajemen Bioskop adalah aplikasi berbasis web untuk pengelolaan bioskop yang dibangun dengan PHP dan MySQL. Aplikasi ini memungkinkan admin untuk mengelola film dan pesanan tiket, serta memungkinkan pengguna untuk memesan tiket film.
 
-![Screenshot Dashboard](SS%20Hasil/dashboard.jpg)
-
 ## Fitur
 
 ### Fitur Umum

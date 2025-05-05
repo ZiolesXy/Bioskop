@@ -18,9 +18,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'];
     $schedule = $_POST['schedule'];
     $price = $_POST['price'];
+    $poster = $_POST['poster'];
 
-    $stmt = $conn->prepare("INSERT INTO movies (title, description, schedule, price) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("sssd", $title, $description, $schedule, $price);
+    $stmt = $conn->prepare("INSERT INTO movies (title, description, schedule, price, poster) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssds", $title, $description, $schedule, $price, $poster);
     $stmt->execute();
 }
 ?>
@@ -168,24 +169,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <textarea name="description" placeholder="Deskripsi" rows="4"></textarea>
         <input type="datetime-local" name="schedule" required>
         <input type="number" name="price" placeholder="Harga" step="0.01" required>
+        <input type="text" name="poster" placeholder="URL Poster Film (https://example.com/poster.jpg)">
         <button type="submit">Tambah Film</button>
     </form>
 
     <h2>Daftar Film</h2>
     <table>
         <tr>
-            <th>ID</th>
             <th>Judul</th>
             <th>Jadwal</th>
+            <th>Poster</th>
             <th>Aksi</th>
         </tr>
         <?php 
         $result = $conn->query("SELECT * FROM movies");
         while ($row = $result->fetch_assoc()): ?>
             <tr>
-                <td><?= $row['id'] ?></td>
                 <td><?= $row['title'] ?></td>
                 <td><?= $row['schedule'] ?></td>
+                <td>
+                    <?php if (!empty($row['poster'])): ?>
+                        <img src="<?= htmlspecialchars($row['poster']) ?>" alt="Poster <?= htmlspecialchars($row['title']) ?>" style="max-width: 50px; max-height: 70px;">
+                    <?php else: ?>
+                        <span>Tidak ada poster</span>
+                    <?php endif; ?>
+                </td>
                 <td class="action-links">
                     <a href="edit.php?id=<?= $row['id'] ?>">Edit</a> | 
                     <a href="delete.php?id=<?= $row['id'] ?>">Hapus</a>

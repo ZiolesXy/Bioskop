@@ -19,10 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $description = $_POST['description'];
     $schedule = $_POST['schedule'];
     $price = $_POST['price'];
+    $poster = $_POST['poster'];
 
     // Update data film
-    $stmt = $conn->prepare("UPDATE movies SET title = ?, description = ?, schedule = ?, price = ? WHERE id = ?");
-    $stmt->bind_param("sssdi", $title, $description, $schedule, $price, $movie_id);
+    $stmt = $conn->prepare("UPDATE movies SET title = ?, description = ?, schedule = ?, price = ?, poster = ? WHERE id = ?");
+    $stmt->bind_param("sssdsi", $title, $description, $schedule, $price, $poster, $movie_id);
     
     if ($stmt->execute()) {
         // Redirect ke dashboard setelah berhasil update
@@ -163,6 +164,17 @@ $movie = $result->fetch_assoc();
         <div class="form-group">
             <label for="price">Harga</label>
             <input type="number" id="price" name="price" value="<?= $movie['price'] ?>" step="0.01" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="poster">URL Poster</label>
+            <input type="text" id="poster" name="poster" value="<?= htmlspecialchars($movie['poster'] ?? '') ?>" placeholder="https://example.com/poster.jpg">
+            <?php if (isset($movie['poster']) && !empty($movie['poster'])): ?>
+                <div style="margin-top: 10px;">
+                    <label>Preview Poster:</label>
+                    <img src="<?= htmlspecialchars($movie['poster']) ?>" alt="Preview Poster" style="max-width: 150px; max-height: 200px; display: block; margin-top: 5px; border: 1px solid #ddd;">
+                </div>
+            <?php endif; ?>
         </div>
         
         <div class="btn-group">

@@ -1,27 +1,37 @@
 <?php
+// Memulai sesi untuk menyimpan informasi login
 session_start();
+// Include file konfigurasi database dan fungsi utilitas
 include '../config.php';
 include '../function.php';
 
+// Memproses form login ketika dikirimkan dengan metode POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Mengambil data username dan password dari form
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    // Prepared statement untuk mencegah SQL injection
     $stmt = $conn->prepare("SELECT * FROM users WHERE username = ?");
     $stmt->bind_param("s", $username);
     $stmt->execute();
     $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
+    // Verifikasi password dan set sesi jika login berhasil
     if ($user && password_verify($password, $user['password'])) {
+        // Menyimpan informasi pengguna ke dalam sesi
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
+        
+        // Mengarahkan pengguna ke dashboard yang sesuai berdasarkan peran
         if ($user['role'] == 'admin') {
             redirect('../admin/dashboard.php');
         } else {
             redirect('../user/dashboard.php');
         }
     } else {
+        // Pesan error jika username atau password salah
         $error = "Username atau password salah. Silakan coba lagi.";
     }
 }
@@ -31,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Bioskop</title>
+    <title>Login - BioskopKu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -338,8 +348,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
         <div class="header">
-            <h1>Masuk Akun</h1>
-            <p>Silakan masuk untuk melanjutkan</p>
+            <h1>BioskopKu</h1>
+            <p>Masuk ke akun Anda untuk melanjutkan</p>
         </div>
 
         <?php if (isset($error)): ?>

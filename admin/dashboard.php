@@ -1,25 +1,34 @@
 <?php
+// Memulai sesi untuk mengakses informasi login
 session_start();
+// Include file konfigurasi database dan fungsi utilitas
 include '../config.php';
 include '../function.php';
 
+// Cek apakah pengguna sudah login dan memiliki hak akses admin
 if (!isLoggedIn() || !is_admin()) redirect('../auth/login.php');
 
-// Cek apakah kolom status dan total_price ada
+// Cek apakah struktur database sudah memiliki kolom yang diperlukan
+// Hal ini penting untuk kompatibilitas dengan versi database lama
+
+// Memeriksa apakah kolom 'status' ada di tabel orders
 $check_status = $conn->query("SHOW COLUMNS FROM orders LIKE 'status'");
 $has_status_column = $check_status->num_rows > 0;
 
+// Memeriksa apakah kolom 'total_price' ada di tabel orders
 $check_total_price = $conn->query("SHOW COLUMNS FROM orders LIKE 'total_price'");
 $has_total_price = $check_total_price->num_rows > 0;
 
 // Tambah Film
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Mengambil data film dari form
     $title = $_POST['title'];
     $description = $_POST['description'];
     $schedule = $_POST['schedule'];
     $price = $_POST['price'];
-    $poster = $_POST['poster'];
+    $poster = $_POST['poster']; // URL gambar poster film
 
+    // Prepared statement untuk mencegah SQL injection
     $stmt = $conn->prepare("INSERT INTO movies (title, description, schedule, price, poster) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssds", $title, $description, $schedule, $price, $poster);
     $stmt->execute();

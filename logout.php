@@ -1,11 +1,13 @@
 <?php
+// Memulai sesi untuk mengakses data sesi yang ada
 session_start();
+// Include file fungsi utilitas
 include 'function.php';
 
-// Destroy the session
-session_unset();
-session_destroy();
+// Menghapus semua data sesi yang tersimpan
+session_unset();  // Menghapus semua variabel sesi
+session_destroy(); // Menghancurkan sesi yang aktif
 
-// Redirect to the login page
+// Mengarahkan pengguna kembali ke halaman login
 redirect('auth/login.php');
 ?>

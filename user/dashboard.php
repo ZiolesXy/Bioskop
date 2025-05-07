@@ -1,10 +1,14 @@
 <?php
+// Memulai sesi untuk mengakses informasi login
 session_start();
+// Include file konfigurasi database dan fungsi utilitas
 include '../config.php';
 include '../function.php';
 
+// Cek apakah pengguna sudah login, jika belum redirect ke halaman login
 if (!isLoggedIn()) redirect('../auth/login.php');
 
+// Mengambil semua data film dari database untuk ditampilkan di dashboard
 $result = $conn->query("SELECT * FROM movies");
 ?>
 <!DOCTYPE html>
@@ -12,7 +16,7 @@ $result = $conn->query("SELECT * FROM movies");
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard User - Bioskop</title>
+    <title>Dashboard User - BioskopKu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,6 +108,13 @@ $result = $conn->query("SELECT * FROM movies");
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        
+        .header-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.5rem;
+        }
 
         .user-info {
             display: flex;
@@ -137,6 +148,27 @@ $result = $conn->query("SELECT * FROM movies");
         .nav-links a:hover {
             color: white;
             background: rgba(255, 255, 255, 0.1);
+        }
+
+        .site-description {
+            margin-bottom: 2.5rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .site-description h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--secondary);
+        }
+        
+        .site-description p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
         }
 
         h2 {
@@ -274,9 +306,14 @@ $result = $conn->query("SELECT * FROM movies");
                 gap: 1rem;
             }
             
+            .header-right {
+                width: 100%;
+                align-items: flex-start;
+            }
+            
             .nav-links {
                 width: 100%;
-                justify-content: flex-end;
+                justify-content: flex-start;
             }
             
             .movie-grid {
@@ -296,24 +333,32 @@ $result = $conn->query("SELECT * FROM movies");
 <body>
     <div class="backdrop"></div>
     <div class="container">
-        <div class="header">
+        <header class="header">
             <div class="header-title">
                 <div class="logo">
                     <i class="fas fa-film"></i>
                 </div>
-                <h1>Bioskop Online</h1>
+                <h1>BioskopKu</h1>
             </div>
-            <div class="user-info">
-                <i class="fas fa-user-circle"></i>
-                <span>Halo, <?= $_SESSION['username'] ?? 'Pengguna' ?></span>
+            <div class="header-right">
+                <div class="user-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Halo, <?= $_SESSION['username'] ?? 'Pengguna' ?></span>
+                </div>
+                <div class="nav-links">
+                    <a href="dashboard.php"><i class="fas fa-home"></i> Beranda</a>
+                    <a href="tickets.php"><i class="fas fa-ticket-alt"></i> Tiket Saya</a>
+                    <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Keluar</a>
+                </div>
             </div>
-            <div class="nav-links">
-                <a href="tickets.php"><i class="fas fa-ticket-alt"></i> Tiket Saya</a>
-                <a href="../logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            </div>
-        </div>
+        </header>
 
-        <h2>Film Tayang Saat Ini</h2>
+        <div class="site-description">
+            <h3>Selamat Datang di BioskopKu!</h3>
+            <p>BioskopKu adalah platform pemesanan tiket film online terbaik di Indonesia. Nikmati pengalaman menonton film terbaru dengan kemudahan pemesanan tiket, pemilihan kursi, dan pembayaran yang aman. Jelajahi film-film terbaru di bawah ini dan pesan tiket Anda sekarang!</p>
+        </div>
+        
+        <h2>Film Terbaru</h2>
         
         <div class="movie-grid">
             <?php while ($row = $result->fetch_assoc()): ?>

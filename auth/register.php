@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar - Bioskop</title>
+    <title>Daftar - BioskopKu</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -330,8 +330,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </div>
         <div class="header">
-            <h1>Selamat Datang</h1>
-            <p>Buat akun untuk mengakses fitur eksklusif</p>
+            <h1>BioskopKu</h1>
+            <p>Daftar untuk mendapatkan akun baru</p>
         </div>
 
         <?php if (isset($error)): ?>
